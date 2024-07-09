@@ -1,0 +1,27 @@
+{
+  "name": "clean-bun",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch src/http/server.ts",
+    "build": "bun build src/http/server.ts",
+    "start": "NODE_ENV=production bun src/http/server.ts",
+    "test": "bun test",
+    "generate": "drizzle-kit generate"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.6",
+    "@types/figlet": "^1.5.8",
+    "drizzle-kit": "^0.22.8"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@paralleldrive/cuid2": "^2.2.2",
+    "drizzle-orm": "^0.31.4",
+    "elysia": "^1.0.27",
+    "figlet": "^1.7.0",
+    "postgres": "^3.4.4"
+  }
+}
