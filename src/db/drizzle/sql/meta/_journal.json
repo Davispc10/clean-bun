@@ -8,6 +8,27 @@
       "when": 1720485653049,
       "tag": "0000_wet_shatterstar",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1720486066197,
+      "tag": "0001_busy_skaar",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1720486320944,
+      "tag": "0002_lethal_shocker",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1720486402564,
+      "tag": "0003_cloudy_lord_hawal",
+      "breakpoints": true
     }
   ]
 }
