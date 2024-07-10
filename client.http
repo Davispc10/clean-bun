@@ -1,1 +1,18 @@
-GET http://localhost:3000 HTTP/1.1
+POST http://localhost:3000/restaurants HTTP/1.1
+content-type: application/json
+
+{
+  "restaurantName": "Davi's food",
+  "managerName": "David",
+  "email": "davi123@gmail.com",
+  "phone": "99999999"
+}
+
+###
+
+POST http://localhost:3000/authenticate HTTP/1.1
+content-type: application/json
+
+{
+  "email": "admin@admin.com"
+}
