@@ -1,15 +1,15 @@
-import { faker } from '@faker-js/faker'
-import { users, restaurants } from './schema'
-import { db } from './connection'
-import chalk from 'chalk'
+import { faker } from '@faker-js/faker';
+import { users, restaurants } from './schema';
+import { db } from './connection';
+import chalk from 'chalk';
 
 /*  
   Reset database
 */
-await db.delete(users)
-await db.delete(restaurants)
+await db.delete(users);
+await db.delete(restaurants);
 
-console.log(chalk.yellow('Database reset!'))
+console.log(chalk.yellow('Database reset!'));
 
 /**
  * Create customers
@@ -18,31 +18,34 @@ await db.insert(users).values([
   {
     name: faker.person.fullName(),
     email: faker.internet.email(),
-    role: 'customer',
+    role: 'customer'
   },
   {
     name: faker.person.fullName(),
     email: faker.internet.email(),
-    role: 'customer',
+    role: 'customer'
   }
-])
+]);
 
-console.log(chalk.yellow('Customers created!'))
+console.log(chalk.yellow('Customers created!'));
 
 /**
  * Create manager
  */
-const [restaurant] = await db.insert(users).values([
-  {
-    name: faker.person.fullName(),
-    email: 'admin@admin.com',
-    role: 'manager',
-  }
-]).returning({
-  id: users.id
-})
+const [restaurant] = await db
+  .insert(users)
+  .values([
+    {
+      name: faker.person.fullName(),
+      email: 'admin@admin.com',
+      role: 'manager'
+    }
+  ])
+  .returning({
+    id: users.id
+  });
 
-console.log(chalk.yellow('Manager created!'))
+console.log(chalk.yellow('Manager created!'));
 
 /**
  * Create restaurant
@@ -53,9 +56,9 @@ await db.insert(restaurants).values([
     description: faker.lorem.paragraph(),
     managerId: restaurant.id
   }
-])
+]);
 
-console.log(chalk.yellow('Manager created!'))
-console.log(chalk.greenBright('Database seeded success!'))
+console.log(chalk.yellow('Manager created!'));
+console.log(chalk.greenBright('Database seeded success!'));
 
-process.exit()
+process.exit();

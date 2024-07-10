@@ -1,51 +1,47 @@
-import Elysia, { t } from "elysia";
-import { db } from "../../db/drizzle/connection";
-import dayjs from "dayjs";
-import { auth } from "../auth";
-import { authLinks } from "../../db/drizzle/schema";
-import { eq } from "drizzle-orm";
+import Elysia, { t } from 'elysia';
+import { db } from '../../db/drizzle/connection';
+import dayjs from 'dayjs';
+import { auth } from '../auth';
+import { authLinks } from '../../db/drizzle/schema';
+import { eq } from 'drizzle-orm';
 
-export const authenticateFromLink = new Elysia().use(auth).get('/auth-links/authenticate', async ({ query, jwt, cookie: { auth }, set }) => {
-  const { code, redirect } = query;
+export const authenticateFromLink = new Elysia().use(auth).get(
+  '/auth-links/authenticate',
+  async ({ query, signUser, set }) => {
+    const { code, redirect } = query;
 
-  const authLinkFromCode = await db.query.authLinks.findFirst({
-    where(fields, { eq }) {
-      return eq(fields.code, code)
+    const authLinkFromCode = await db.query.authLinks.findFirst({
+      where(fields, { eq }) {
+        return eq(fields.code, code);
+      }
+    });
+
+    if (!authLinkFromCode) {
+      throw new Error('Auth link not found');
     }
-  });
 
-  if (!authLinkFromCode) {
-    throw new Error('Auth link not found');
-  }
+    const daySinceAuthLinkWasCreted = dayjs().diff(authLinkFromCode.createdAt, 'days');
 
-  const daySinceAuthLinkWasCreted = dayjs().diff(authLinkFromCode.createdAt, 'days')
-
-  if (daySinceAuthLinkWasCreted > 7) {
-    throw new Error('Auth link expired, please generate a new one.');
-  }
-
-  const managedRestaurant = await db.query.restaurants.findFirst({
-    where(fields, { eq }) {
-      return eq(fields.managerId, authLinkFromCode.userId)
+    if (daySinceAuthLinkWasCreted > 7) {
+      throw new Error('Auth link expired, please generate a new one.');
     }
-  });
 
-  const jwtToken = await jwt.sign({
-    sub: authLinkFromCode.userId,
-    restaurantId: managedRestaurant?.id
-  });
+    const managedRestaurant = await db.query.restaurants.findFirst({
+      where(fields, { eq }) {
+        return eq(fields.managerId, authLinkFromCode.userId);
+      }
+    });
 
-  auth.value = jwtToken
-  auth.httpOnly = true
-  auth.maxAge = 60 * 60 * 24 * 7 // 7 days
-  auth.path = '/'
+    await signUser({ sub: authLinkFromCode.userId, restaurantId: managedRestaurant?.id });
 
-  await db.delete(authLinks).where(eq(authLinks.code, code))
+    await db.delete(authLinks).where(eq(authLinks.code, code));
 
-  set.redirect = redirect
-}, {
-  query: t.Object({
-    code: t.String(),
-    redirect: t.String(),
-  })
-})
+    set.redirect = redirect;
+  },
+  {
+    query: t.Object({
+      code: t.String(),
+      redirect: t.String()
+    })
+  }
+);
