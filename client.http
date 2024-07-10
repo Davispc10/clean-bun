@@ -16,3 +16,8 @@ content-type: application/json
 {
   "email": "admin@admin.com"
 }
+
+###
+
+GET http://localhost:3000/auth-links/authenticate?code=mjwtsib3z6de3s53jvk7z05o&redirect=http%3A%2F%2Flocalhost%3A3000 HTTP/1.1
+content-type: application/json
