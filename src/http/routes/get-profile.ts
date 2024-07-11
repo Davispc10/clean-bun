@@ -1,6 +1,7 @@
 import Elysia from 'elysia';
 import { auth } from '../auth';
 import { db } from '../../db/drizzle/connection';
+import { UnauthorizedError } from '../errors/unauthorized-error';
 
 export const getProfile = new Elysia().use(auth).get('/me', async ({ getCurrentUser }) => {
   const { userId } = await getCurrentUser();
@@ -12,7 +13,7 @@ export const getProfile = new Elysia().use(auth).get('/me', async ({ getCurrentU
   });
 
   if (!user) {
-    throw new Error('User not found');
+    throw new UnauthorizedError();
   }
 
   return user;
