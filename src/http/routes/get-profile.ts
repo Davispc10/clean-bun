@@ -1,4 +1,4 @@
-import Elysia from 'elysia';
+import { Elysia } from 'elysia';
 import { auth } from '../auth';
 import { db } from '../../db/drizzle/connection';
 import { UnauthorizedError } from '../errors/unauthorized-error';
