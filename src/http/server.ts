@@ -13,6 +13,11 @@ import { dispatchOrder } from './routes/dispatch-order';
 import { getOrders } from './routes/get-orders';
 import { getMonthReceipt } from './routes/get-month-receipt';
 import { getDayOrdersAmount } from './routes/get-day-orders-amount';
+import { getMonthOrdersAmount } from './routes/get-month-orders-amount';
+import { getMonthCanceledOrdersAmount } from './routes/get-month-canceled-orders-amount';
+import { getDailyReceiptInPeriod } from './routes/get-daily-receipt-in-period';
+import { getPopularProducts } from './routes/get-popular-products';
+import chalk from 'chalk';
 
 const app = new Elysia()
   .use(registerRestaurant)
@@ -29,6 +34,10 @@ const app = new Elysia()
   .use(getOrders)
   .use(getMonthReceipt)
   .use(getDayOrdersAmount)
+  .use(getMonthOrdersAmount)
+  .use(getMonthCanceledOrdersAmount)
+  .use(getDailyReceiptInPeriod)
+  .use(getPopularProducts)
   .onError(({ code, error, set }) => {
     switch (code) {
       case 'VALIDATION': {
@@ -46,5 +55,5 @@ const app = new Elysia()
   });
 
 app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+  console.log(chalk.greenBright('Server is running on port 3000'));
 });
